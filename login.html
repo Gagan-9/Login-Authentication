@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h3 class="row">Login</h3>
+        <input type="text" placeholder="Enter username" id="userInp" class="form-control mb-3">
+        <input type="password" placeholder="Enter password" id="passInp" class="form-control mb-3">
+        <div class="custom-control custom-switch mb-3">
+            <input type="checkbox" class="custom-control-input" id="customSwitch1">
+            <label class="custom-control-label" for="customSwitch1">Keep logged In</label>
+        </div>
+        <button id="sub_btn" class="btn mb-3 w-100">Sign In</button>
+        <a href="register.html" class="badge badge-secondary py-2 w-100">Create a new account?</a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-analytics.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAEQYU1yUakVMGRbuePejTR-eVVMG7ltek",
+  authDomain: "login-89a58.firebaseapp.com",
+  databaseURL: "https://login-89a58-default-rtdb.firebaseio.com",
+  projectId: "login-89a58",
+  storageBucket: "login-89a58.appspot.com",
+  messagingSenderId: "826914996800",
+  appId: "1:826914996800:web:7450d15b247af3636bd5a5",
+  measurementId: "G-CKXZ94JRR1"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
+import {
+  getDatabase,
+  ref,
+  set,
+  child,
+  get
+} from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
+
+        const db = getDatabase();
+
+        const username = document.getElementById('userInp');
+        const password = document.getElementById('passInp');
+        const submit = document.getElementById('sub_btn');
+
+        function AuthenticateUser() {
+            const dbref = ref(db);
+            get(child(dbref, "UsersList/" + username.value)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const dbpass = decPass(snapshot.val().password);
+                    if (dbpass === password.value) {
+                        login(snapshot.val());
+                    } else {
+                        alert("Invalid password");
+                    }
+                } else {
+                    alert("User does not exist");
+                }
+            });
+        }
+
+        function decPass(dbpass) {
+            const pass12 = CryptoJS.AES.decrypt(dbpass, password.value);
+            return pass12.toString(CryptoJS.enc.Utf8);
+        }
+
+        function login(user) {
+            const keepLoggedIn = document.getElementById('customSwitch1').checked;
+            if (!keepLoggedIn) {
+                sessionStorage.setItem('user', JSON.stringify(user));
+                window.location.href = "home.html";
+            } else {
+                localStorage.setItem('keepLoggedIn', 'yes');
+                localStorage.setItem('user', JSON.stringify(user));
+                window.location.href = 'home.html';
+            }
+        }
+
+        submit.addEventListener('click', AuthenticateUser);
+    </script>
+</body>
+</html>

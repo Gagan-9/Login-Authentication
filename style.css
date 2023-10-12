@@ -1,0 +1,50 @@
+/* Reset default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Apply the background image to the entire page */
+  body {
+    margin: 0;
+    padding: 0;
+    background: url('https://www.hdwallpapers.in/download/sunset_scenery-wide.jpg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .container{
+    background: rgba(156, 141, 141, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+  }
+   input {
+    background: rgba(156, 141, 141, 0.7);
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 10px; 
+    background: transparent;
+}
+.btn{
+    background-color: rgb(226, 81, 29);
+    color: aliceblue;
+    border-radius: 10px;
+}
+input:hover{
+ border: 2px solid black;
+}
+h3{
+    color: black;
+    justify-content: center;
+}
+.btn:hover{
+    background-color: rgb(202, 71, 24);
+}
